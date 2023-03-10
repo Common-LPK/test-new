@@ -12,7 +12,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn Reactasdf
+          Learn React minjupark
         </a>
       </header>
     </div>
