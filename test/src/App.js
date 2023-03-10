@@ -12,7 +12,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React minjupark-again
+          Learn React gunhwa
         </a>
       </header>
     </div>
