@@ -1,14 +1,43 @@
 import React from "react";
 import { useState } from "react";
 
-const arr = [];
 
 function App(props) {
   const [btn, setBtn] = useState(false);
   const fiberNode = { ...props.node };
+  const arr = [];
 
   function click() {
     setBtn(!btn);
+  }
+
+
+  function createNode(fiberNode) {
+    // console.log('input', fiberNode);
+    const obj = { ...fiberNode };
+    let name;
+  
+    if (fiberNode.tag === 3) {
+      name = "root";
+    } else if (fiberNode.tag === 0) {
+      name = fiberNode.elementType.name;
+    } else {
+      name = fiberNode.elementType;
+    }
+  
+    arr.push(name);
+    // console.log(obj);
+
+    if (obj.child) {
+      const obj2 = { ...obj.child };
+      createNode(obj2);
+    }
+
+    if (obj.sibling) {
+      const obj1 = { ...obj.sibling };
+      createNode(obj1);
+    }
+
   }
 
   // console.log(fiberNode.alternate);
@@ -45,22 +74,6 @@ function C() {
       This is C
     </div>
   )
-}
-
-function createNode(fiberNode) {
-  const obj = { ...fiberNode };
-
-  arr.push(obj);
-  console.log('child',obj, obj.child)
-  if (obj.child === null) {
-    if (obj.sibling === null) {
-      return;
-    }
-    console.log('s', obj.sibling)
-    createNode(obj.sibling);
-  }
-  console.log('c', obj.child)
-  createNode(obj.child);
 }
 
 export default App;
