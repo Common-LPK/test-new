@@ -1,22 +1,66 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useState } from "react";
 
-function App() {
+const arr = [];
+
+function App(props) {
+  const [btn, setBtn] = useState(false);
+  const fiberNode = { ...props.node };
+
+  function click() {
+    setBtn(!btn);
+  }
+
+  // console.log(fiberNode.alternate);
+  createNode(fiberNode.alternate);
+
+  console.log(arr);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React gunhwa
-        </a>
-      </header>
+    <div>
+      <A />
+      <button onClick={click}>클릭!</button>
+      {btn && <B />}
     </div>
   );
+}
+
+function A() {
+  return (
+    <C />
+  )
+}
+
+function B() {
+  return (
+    <div>
+      This is B
+    </div>
+  )
+}
+
+function C() {
+  return (
+    <div>
+      This is C
+    </div>
+  )
+}
+
+function createNode(fiberNode) {
+  const obj = { ...fiberNode };
+
+  arr.push(obj);
+  console.log('child',obj, obj.child)
+  if (obj.child === null) {
+    if (obj.sibling === null) {
+      return;
+    }
+    console.log('s', obj.sibling)
+    createNode(obj.sibling);
+  }
+  console.log('c', obj.child)
+  createNode(obj.child);
 }
 
 export default App;
