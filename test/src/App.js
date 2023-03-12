@@ -1,62 +1,69 @@
 import React from "react";
 import { useState } from "react";
 
-
-function App(props) {
+function App({ node }) {
   const [btn, setBtn] = useState(false);
-  const fiberNode = { ...props.node };
   const arr = [];
 
   function click() {
     setBtn(!btn);
   }
 
+  console.log('fiber', node);
 
   function createNode(fiberNode) {
-    // console.log('input', fiberNode);
-    const obj = { ...fiberNode };
+    if (Object.keys(fiberNode).length === 0) return;
+    console.log('input', fiberNode);
     let name;
-  
-    if (fiberNode.tag === 3) {
-      name = "root";
-    } else if (fiberNode.tag === 0) {
-      name = fiberNode.elementType.name;
+    let node;
+    if (fiberNode.alternate) {
+      node = fiberNode.alternate;
     } else {
-      name = fiberNode.elementType;
+      node = fiberNode;
     }
-  
+
+    if (node.tag === 3) {
+      name = "root";
+    } else if (node.tag === 0) {
+      name = node.elementType.name;
+    } else {
+      name = node.elementType;
+    }
+
     arr.push(name);
-    // console.log(obj);
 
-    if (obj.child) {
-      const obj2 = { ...obj.child };
-      createNode(obj2);
+    if (fiberNode.child) {
+      console.log('child');
+      createNode(fiberNode.child);
     }
 
-    if (obj.sibling) {
-      const obj1 = { ...obj.sibling };
-      createNode(obj1);
+    if (fiberNode.sibling) {
+      console.log(name, "'s sibling");
+      createNode(fiberNode.sibling);
     }
-
   }
 
-  // console.log(fiberNode.alternate);
-  createNode(fiberNode.alternate);
+  setTimeout(() => {
+    createNode(node.alternate);
+    console.log(arr);
 
-  console.log(arr);
+  }, 0);
 
   return (
     <div>
-      <A />
+      <A btn={btn}/>
       <button onClick={click}>클릭!</button>
-      {btn && <B />}
+      <D />
     </div>
   );
 }
 
-function A() {
+function A({ btn }) {
   return (
-    <C />
+    <div>
+      {!btn && <C />}
+      {!btn && <B />}
+    </div>
   )
 }
 
@@ -72,6 +79,14 @@ function C() {
   return (
     <div>
       This is C
+    </div>
+  )
+}
+
+function D() {
+  return (
+    <div>
+      I am D
     </div>
   )
 }
